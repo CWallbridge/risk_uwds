@@ -1,0 +1,57 @@
+### Everything is a node. Nodes can extend or rotate around an axis. there are no explicit links between them###
+#ballandsocket joint (rotation) + A floatingplanar joint (length) will serve as the basic building block. /sidenote there might be a better way that does not require defining a bone of variable legnth and then fixing it to not have a variable legnth.
+#an issue might be tranlsating between the coordinate frames. \_(._.)_/
+
+
+TParent 1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0  \
+1 0 0   0 1 0   0 0 1   0 0 0
+
+
+
+parents -1 0 1 2 3 4 5 6 7 #link parent indices, -1 means parent is the world frame. |parent[0],...parent[n-1]|
+axis 1 0 0   0 1 0   0 0 1   1 0 0   0 1 0    0 0 1   1 0 0   0 1 0    0 0 1 #DOF axis. 3 values per node
+jointtype p p p r r r p p p #Dof type r-revolute (rotate) p-prismatic (slide) r r r r r r r r r
+
+qMin -1 -1 -1 -1 -1 -1 -1 -1 -1 #config lower levels (in radians.) qMinDeg is equivalent in degrees
+qMax 1 1 1 1 1 1 1 1 1
+q -0.5 0 0 0 0 0 1 0 0 #initial config (xyz)!!! Important. 
+
+geometry   ""   ""   "../objects/sphere.off" ""   ""   "../objects/thincube.off" ""   ""   "../objects/sphere.off"
+geomscale 0.05 0.05 0.05 0.05 0.05 1 0.05 0.05 0.05
+
+
+joint floatingplanar 2 -1 #joint [type] [index] [base index (optional)] floatingplanar - 3DOF 2 translation 1 rotation. (mobile wheel base)
+driver normal 0 2 #normal,affine,translation,rotation
+driver normal 1 2
+driver normal 2 2
+
+
+joint ballandsocket 5 2
+driver rotation 3 5 #must set to rotation
+driver rotation 4 5
+driver rotation 5 5
+
+
+joint floatingplanar 8 5 #joint [type] [index] [base index (optional)] floatingplanar - 3DOF 2 translation 1 rotation. (mobile wheel base)
+driver normal 6 8 #normal,affine,translation,rotation
+driver normal 7 8
+driver normal 8 8
+
+
+#servoP 50 50 50 50 50 50 50 50 50
+#servoI 100 100 100 
+#servoI 0 0 0 0 0 0 0 0 0
+#servoD 3 3 3 3 3 3 3 3 3
+#mass       0 0 0.05 0 0 0.05 0 0 0.05
+#com    0 0 0   0 0 0   0 0 0   0 0 0   0 0 0   0 0 0   0 0 0   0 0 0   0 0 0
+#inertiaDiag 0 0 0  0 0 0  100 100 100  0 0 0  0 0 0  100 100 100  0 0 0  0 0 0  100 100 100
+#torqueMax  5 5 5 5 5 5 5 5 5
+#accMax     5 5 5 5 5 5 5 5 5
+#velMax  5 5 5 5 5 5 5 5 5
