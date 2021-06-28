@@ -1,2 +1,2 @@
 # risk_uwds
-Underwords repository for R.I.S.K.
+Repository for the R.I.S.K. Underworlds client.
