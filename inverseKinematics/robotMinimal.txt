@@ -1,0 +1,1 @@
+'robot::arm_right_1_link', 'robot::arm_right_2_link', 'robot::arm_right_3_link', 'robot::arm_right_4_link', 'robot::arm_right_5_link','robot::arm_right_6_link', 'robot::arm_right_7_link'

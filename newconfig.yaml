@@ -1,0 +1,27 @@
+joint_names: [gripper_left_finger_1_joint, gripper_left_finger_2_joint]
+action_name: /gripper_left/joint_trajectory_controller/follow_joint_trajectory
+service_ns: /gripper_left/driver
+default_vel: 0.3
+
+# single positions
+/script_server/gripper_left/new: [[0.6, 0.4]]
+/script_server/arm_left/arm_to_box: [[1.1, 1.8, -1.5, 0.0, -1.5, 0, 0]]
+/script_server/arm_left/arm_to_side: [[-0.9599, -1.6581, 1.0472, 1.6581, -1.5, 0, 0]]
+
+#/script_server/arm_left/arm_to_coke: [[0,0,0,1,0,1,1.8],[0.25,1,0,1,0,1,1.8]]
+/script_server/arm_left/lift_coke: [[0,1.5,0,1,0,1,-1.8]]
+
+/script_server/arm_left/arm_down: [[0, 0, 0, 0, 0, 0, 0]]
+/script_server/arm_right/arm_to_side: [[-0.9599, -1.6581, 1.0472, 1.6581, -1.5, 0, 0]]
+
+
+/script_server/arm_left/arm_test: [[0,0,0,0,0,0,0],[6.28,0,0,0,0,0,0]]
+
+#[[1.06, 1.2, -1.4, 1.9, -1.84, -1.12, -0.64]]#ORIGINAL
+#[[1.02, 1.8, -1.5, 0.0, -1.5, -0.12, 0]]#SO CLOSE
+#There are three joints (Spheres) for the robot. For first two spheres, rotation and thus alignment of arm is determined by 2 numbers. For last one 3. 
+#The first number determines the horizontal rotation, the second vertical. (around x and z axis respectively)
+#For the last joint, the additional number determines rotation of the claw
+
+#Position of milkbox 0.33,0.07,0.35
+#ideal 0.42, same, 0

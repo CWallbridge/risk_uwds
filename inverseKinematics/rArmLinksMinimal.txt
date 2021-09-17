@@ -1,2 +1,4 @@
-actor::upperarm_r
-actor::lowerarm_r
+actor__upperarm_r
+actor__lowerarm_r
+actor__hand_r
+

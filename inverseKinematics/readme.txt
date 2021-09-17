@@ -1,3 +1,11 @@
+getTfFrames.py is the main script that solves if it is possible for the human to knock the cup over.
+inverseKinematicsKlampt.py visualizes the solution and contains implementaiton of IK solver.
+createRobotGrasp.py - uses an ik solver that creates joint angles for the robot to grasp the cup.
+
+
+
+
+
 Notes on implementation.
 By default Gazebo does not publish the animation to /tf frames topic.
 A plugin would be required to do this:
