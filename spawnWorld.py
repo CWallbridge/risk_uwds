@@ -19,6 +19,7 @@ import numpy as np
 import math
 from scipy.spatial.transform import Rotation as R
 from tf.transformations import *
+import copy
 #Setup - remove later
 os.system('uwds stop')
 os.system('uwds start')
@@ -78,11 +79,17 @@ class Underworld_World:
             c_node.transformation = np.matmul(transformation,c_node.transformation)
             self.target_world.scene.nodes.update(c_node)
         except:
+            print("Exception loding coffee table")
+            time.sleep(1)
             self.load_coffee_table(mesh_name,transformation = transformation)
     def load_coke(self,mesh_name,transformation = np.eye(4)):
         try:
             meshes = self.load_mesh(mesh_name)
-            c_node = self.target_world.scene.nodebyname("CokeCan")[0]
+            try:
+                c_node = self.target_world.scene.nodebyname("CokeCan")[0]
+            except:
+                time.sleep(1)
+                c_node = self.target_world.scene.nodebyname("CokeCan")[0]
             self.org_coke_t = c_node.transformation
             self.coke = c_node
             c_node.transformation = np.matmul(transformation,c_node.transformation)
@@ -311,8 +318,8 @@ def update_pos(data):
             update_period_uwds = 100
             print("updating all nodes")
             create_uwds_joints(underworld_real)
-            if underworld_hypo.nodes_created == False:
-                create_uwds_joints(underworld_hypo)
+            #if underworld_hypo.nodes_created == False:
+            create_uwds_joints(underworld_hypo)
 
         busy = False
     
@@ -347,7 +354,7 @@ def pointsToRotMat(p1,p2):
 def set_hypothetical_angles(hypothetical_world,gazebo_world):
     """displays the angles in /human_solution inside hypothetical world.
     To view, type "uwds view hypothetical" in a new window.
-    This code will only stop running if ctr+c is pressed to exit. """
+    This code will only stop running if ctrl+c is pressed to exit or esc is pressed in the underworlds window. """
     parent_name = "actor__spine_03"
     child_name = "actor__upperarm_r"
     #print([x for x in gazebo_world.relative_poses])
@@ -417,13 +424,14 @@ print("COKE AND TABLE POSITIONS FOUND!")
 #Load coffee table and coke
 t_t = np.eye(4)
 t_t[0:3,3]=table_pos
+print("loading coke and table meshes")
 underworld_real.load_coffee_table(mesh_path+"cafe_table_new.dae",transformation=t_t)
 underworld_hypo.load_coffee_table(mesh_path+"cafe_table_new.dae",transformation=t_t)
 t_t[0:3,3]=coke_pos
 underworld_real.load_coke(mesh_path+"colourlessCoke.dae",transformation=t_t)#colourlessCoke (unfortunately blender doesnt like the .dae file)
 underworld_hypo.load_coke(mesh_path+"colourlessCoke.dae",transformation=t_t)
 
-
+print("gathering static frames")
 #tf frames are split into static_tf and tf. Get static tfs once.
 robot_poses_found = False
 static_frames = {}
@@ -437,8 +445,12 @@ static_tf_subscriber.unregister()
 
 link_updater = rospy.Subscriber("/tf", TFMessage, update_pos)#person & robot are moving so continually update them
 print("creating real and hypothetical worlds...")
-while not underworld_hypo.nodes_created:
-    continue
+try:
+    while not underworld_hypo.nodes_created:
+        continue
+except KeyboardInterrupt:
+    print('Interrupted')
+    sys.exit(0)
 print("adjusting the hypothetical world's joint angles")
 loop = True
 while loop:
@@ -446,5 +458,5 @@ while loop:
     print("setting angles")
     time.sleep(2)
 
-#rospy.spin()
+rospy.spin()
 #os.system('uwds stop')

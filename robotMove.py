@@ -2,6 +2,7 @@
 #It now only contains robot behaviour
 #check if it is possible for the human to knock over the cup
 import os
+#import inverseKinematics.getTfFrames
 os.system('python inverseKinematics/getTfFrames.py')#I'm not proud of this implementation either \_(._.)_/ but it'll have to do for now
 
 import rospy

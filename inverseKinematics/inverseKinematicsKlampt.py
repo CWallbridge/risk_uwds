@@ -21,7 +21,7 @@ def visualize():#XYZ
 
 def kill():
     vis.kill()
-    
+
 def update(q):
     world.robot(0).setConfig(q)
 

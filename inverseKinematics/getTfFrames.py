@@ -111,7 +111,7 @@ def create_rob_file(x,y,z,path,human_limits=True):
     
     if len(x) != 3 or len(y) != 3 or len(z) != 3:
         print(x,y,z)
-        raise Exception('Plese provide exactly 3 joint positions! You provided: '+str(len(x))+"  "+str(len(y))+"  "+str(len(z))+" joints")#the joint angles are being worked out from three points. This is bcs the animation's absolute orientation is messed up.
+        raise Exception('Please provide exactly 3 joint positions! You provided: '+str(len(x))+"  "+str(len(y))+"  "+str(len(z))+" joints")#the joint angles are being worked out from three points. This is bcs the animation's absolute orientation is messed up.
     robot_specification_string = ""
     robot_specification_string += TParent(number_of_nodes)+"\n"
     robot_specification_string += parents(number_of_nodes)+"\n"
@@ -161,7 +161,7 @@ def relative_to_absolute(child_frame, debug = False):
             print(current_transform)
     return current_transform
 def klampt_to_gazebo(configuration,padding = 1):
-    """function that converts from joint angles calculated by klampt to joint angles requiered by gazebo.
+    """function that converts from joint angles calculated by klampt to joint angles required by gazebo.
     Gazebo uses 2 angles to describe orientation of arm + node. Currently 3 are used inside klampt.
     padding will dictate how many zeros to add at the end of klampt's configuration."""
     conf_length = len(configuration)
@@ -198,7 +198,7 @@ relative_poses = {'gazebo_world': np.eye(4)}
 nodes_parent = {'gazebo_world' : 'world'}
 def update_pos(data):
     """Main function. It collects the relevant tf frames (data) for human and robot. 
-    Then tries to find a trajectory for human to knock over the cup and for robot pick up hte cup."""
+    Then tries to find a trajectory for human to knock over the cup and for robot to pick up the cup."""
     global busy,solution_found,solution,all_poses_human,all_poses_robot,lastUpdateTime
     #check if it should update
     sinceLastUpdateDuration = rospy.get_rostime() - lastUpdateTime
