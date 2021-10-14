@@ -2,7 +2,8 @@
 #It now only contains robot behaviour
 #check if it is possible for the human to knock over the cup
 import os
-#import inverseKinematics.getTfFrames
+
+#import getTfFrames
 
 import rospy
 from geometry_msgs.msg import Pose, PoseStamped
@@ -127,6 +128,9 @@ def robot_update(data):
 #Actual script
 if __name__ == "__main__":
     global attached
+    
+    #rospy.init_node("robotMove")
+    #getTfFrames.run_get_Tf_Frames()
     
     os.system('python getTfFrames.py')#I'm not proud of this implementation either \_(._.)_/ but it'll have to do for now
 

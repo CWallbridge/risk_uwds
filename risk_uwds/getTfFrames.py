@@ -40,6 +40,8 @@ length_of_gripper = 0.1#hardcode length of gripper. this is because there is no 
 human_joint_robot_path = "data/human.rob"
 careObot_path = "data/careObot.rob"
 robot_global_links = ['robot::arm_left_2_link', 'robot::arm_left_4_link', 'robot::arm_left_6_link']
+relevant_names_human = []
+#lastUpdateTime = rospy.get_rostime()
 
 ###Functions for creating .rob FILE(S)###
 def TParent(size):
@@ -226,12 +228,12 @@ def process_possible_solution(configuration):
 def update_pos(data):
     """Main function. It collects the relevant tf frames (data) for human and robot. 
     Then tries to find a trajectory for human to knock over the cup and for robot to pick up the cup."""
-    global busy,solution_found,solution,all_poses_human,all_poses_robot,lastUpdateTime,coke_pos,coke_height,human_joint_robot_path
+    global busy,solution_found,solution,all_poses_human,all_poses_robot,coke_pos,coke_height,human_joint_robot_path,relevant_names_human
     #check if it should update
-    sinceLastUpdateDuration = rospy.get_rostime() - lastUpdateTime
-    if sinceLastUpdateDuration.to_sec() < updatePeriod:
-        return
-    lastUpdateTime = rospy.get_rostime()
+    #sinceLastUpdateDuration = rospy.get_rostime() - lastUpdateTime
+    #if sinceLastUpdateDuration.to_sec() < updatePeriod:
+        #return
+    #lastUpdateTime = rospy.get_rostime()
     if busy:
         return
     busy = True
@@ -339,10 +341,12 @@ def read_links(file_path):
 #    plt.savefig('plots/time'+str(make_plot)+'.png', format='png')
     #plt.show()#doesn't show the graph... my best guess is python doesn't like visualizing from different thread -_- ufff.
 
-if __name__ == "__main__":
-
+def run_get_Tf_Frames():
+    
+    global relevant_names_human
+    
     print("START")
-
+    
     #time_before_solving_equation = 2#20 equals roughly 1 second. should change this to time instead of nr of messages recieved at some point.
     #make_plot = 0
     file_path = "data/rArmLinksMinimal.txt"#path to actor links that need to be plotted/considered when calculating inverse kinematics.
@@ -352,10 +356,9 @@ if __name__ == "__main__":
     print(relevant_names_human)
     #inverseKinematicsKlampt.visualize()
     #print("Visualized world!")
-    rospy.init_node("getTFFrames")
-    lastUpdateTime = rospy.get_rostime()
-    updatePeriod = 0#0.05
-    print("initialized node")
+    #lastUpdateTime = rospy.get_rostime()
+    #updatePeriod = 0#0.05
+    #print("initialized node")
     #Find coke
     coke_finder = rospy.Subscriber("/gazebo/model_states", ModelStates, get_coke_pos)
     print("WAITING TO FIND COKE!")
@@ -383,3 +386,8 @@ if __name__ == "__main__":
     inverseKinematicsKlampt.kill()
     rospy.signal_shutdown("no longer needed")
     #rospy.spin()
+    
+if __name__ == "__main__":
+    
+    rospy.init_node("getTFFrames")
+    run_get_Tf_Frames()
