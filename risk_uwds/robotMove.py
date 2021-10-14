@@ -13,6 +13,7 @@ from gazebo_msgs.msg import ModelState,ModelStates
 from gazebo_msgs.msg import LinkStates#Used to get global position of arm
 import time #Need this to make script sleep. If publishing too quickly after instantiating publisher it doesnt work. WHY?
 import math
+from RobotCommand import RobotCommand
 
 #Var definitions
 #Dictionary containing all relevant paths
@@ -24,26 +25,8 @@ cokeState.model_name = 'Coke'
 original_quaternion = None#Change me
 robot_pos,robot_orientation = 0,0
 #starting_pos = pose()
-#Classes & Functions
 
-class MyScript(script):
-    def Initialize(self):
-        rospy.loginfo("Initializing all components...")
-    def Run(self):
-        rospy.loginfo("Initialized.")
-    def go_to_table(self):
-        self.sss.move("arm_right","arm_to_side")
-        self.sss.move("arm_left","arm_to_side")
-
-    def lift_coke(self):
-        self.sss.move("gripper_left","open")
-        self.sss.move("arm_left","arm_above_coke")
-        self.sss.move("arm_left","arm_to_coke")
-        global attached
-        attached=True
-        print("ATTACHING")
-        self.sss.move("arm_left","arm_above_coke")
-
+#Functions
 def make_pose(position,quaternion):
     #make a pose of object given xyz, and quaternion
     object_pose = Pose()
@@ -143,6 +126,8 @@ def robot_update(data):
             
 #Actual script
 if __name__ == "__main__":
+    global attached
+    
     os.system('python getTfFrames.py')#I'm not proud of this implementation either \_(._.)_/ but it'll have to do for now
 
     perform_scenario = rospy.get_param("/solution")#open("inverseKinematics/solution.txt","r").read().strip()=="True"#getTfFrames.solution
@@ -157,16 +142,19 @@ if __name__ == "__main__":
         pub1 = rospy.Publisher('/docker_control/move_base_linear_simple/goal', PoseStamped, queue_size=10)#Changed from /move_base_simple/goal
         #Move arms to side so robot can pass through the hallway
 
-        SCRIPT = MyScript()
-        SCRIPT.Start()
+        rcmd = RobotCommand()
+        rcmd.Start()
 
         #Move robot's base to start position
         #print("Moving the robot to table")
         #move_to_table()
 
         #Move robot's arm to grab the coke
-        #print("It was suggested to skip moving to the table and start with the robot observing the person writing")
+
         print("Moving the arm to coke")
-        SCRIPT.lift_coke()
+
+        attached = rcmd.larm_to_coke()
+
+        rcmd.lift_coke()
         rospy.spin()
 

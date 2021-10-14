@@ -5,3 +5,4 @@ from .riskHelper import *
 from .robotMove import *
 from .spawnWorld import *
 from .UwdsManager import *
+from .RobotCommand import *
