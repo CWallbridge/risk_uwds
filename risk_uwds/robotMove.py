@@ -3,7 +3,6 @@
 #check if it is possible for the human to knock over the cup
 import os
 #import inverseKinematics.getTfFrames
-os.system('python getTfFrames.py')#I'm not proud of this implementation either \_(._.)_/ but it'll have to do for now
 
 import rospy
 from geometry_msgs.msg import Pose, PoseStamped
@@ -26,10 +25,7 @@ original_quaternion = None#Change me
 robot_pos,robot_orientation = 0,0
 #starting_pos = pose()
 #Classes & Functions
-perform_scenario = rospy.get_param("/solution")#open("inverseKinematics/solution.txt","r").read().strip()=="True"#getTfFrames.solution
 
-if not perform_scenario:
-    print("The person cannot knock over the cup or the robot is too far away! Try increasing tolerance in getTfFrames. Doing nothing.")
 class MyScript(script):
     def Initialize(self):
         rospy.loginfo("Initializing all components...")
@@ -47,12 +43,6 @@ class MyScript(script):
         attached=True
         print("ATTACHING")
         self.sss.move("arm_left","arm_above_coke")
-
-class pose:
-   def __init__(self,x=0,y=0,z=0):
-      self.x = x
-      self.y = y
-      self.z = z
 
 def make_pose(position,quaternion):
     #make a pose of object given xyz, and quaternion
@@ -141,6 +131,7 @@ def move_to_table():
     print("goal Y: " +str(p2_finish[1]))
     print("Final body position reached... waiting 5 seconds before grasping")
     time.sleep(5)
+    
 def robot_update(data):
     global robot_pos,robot_orientation
     for i in range(len(data.name)):
@@ -151,24 +142,31 @@ def robot_update(data):
             cokeState.pose = data.pose[i]
             
 #Actual script
-if perform_scenario:#perform_scenario
-    #Check if the can gets close ot robot's  arm. if so, attach it
-    rospy.Subscriber("/gazebo/link_states", LinkStates, armUpdate)
-    rospy.Subscriber("/gazebo/model_states", ModelStates, robot_update)#Used for getting robot's position & updating coke position
-    pub = rospy.Publisher('/gazebo/set_model_state', ModelState, queue_size=10)
-    pub1 = rospy.Publisher('/docker_control/move_base_linear_simple/goal', PoseStamped, queue_size=10)#Changed from /move_base_simple/goal
-    #Move arms to side so robot can pass through the hallway
+if __name__ == "__main__":
+    os.system('python getTfFrames.py')#I'm not proud of this implementation either \_(._.)_/ but it'll have to do for now
 
-    SCRIPT = MyScript()
-    SCRIPT.Start()
+    perform_scenario = rospy.get_param("/solution")#open("inverseKinematics/solution.txt","r").read().strip()=="True"#getTfFrames.solution
 
-    #Move robot's base to start position
-    #print("Moving the robot to table")
-    #move_to_table()
+    if not perform_scenario:
+        print("The person cannot knock over the cup or the robot is too far away! Try increasing tolerance in getTfFrames. Doing nothing.")
+    if perform_scenario:#perform_scenario
+        #Check if the can gets close ot robot's  arm. if so, attach it
+        rospy.Subscriber("/gazebo/link_states", LinkStates, armUpdate)
+        rospy.Subscriber("/gazebo/model_states", ModelStates, robot_update)#Used for getting robot's position & updating coke position
+        pub = rospy.Publisher('/gazebo/set_model_state', ModelState, queue_size=10)
+        pub1 = rospy.Publisher('/docker_control/move_base_linear_simple/goal', PoseStamped, queue_size=10)#Changed from /move_base_simple/goal
+        #Move arms to side so robot can pass through the hallway
 
-    #Move robot's arm to grab the coke
-    print("It was suggested to skip moving to the table and start with the robot observing the person writing")
-    print("Moving the arm to coke")
-    SCRIPT.lift_coke()
-    rospy.spin()
+        SCRIPT = MyScript()
+        SCRIPT.Start()
+
+        #Move robot's base to start position
+        #print("Moving the robot to table")
+        #move_to_table()
+
+        #Move robot's arm to grab the coke
+        #print("It was suggested to skip moving to the table and start with the robot observing the person writing")
+        print("Moving the arm to coke")
+        SCRIPT.lift_coke()
+        rospy.spin()
 
