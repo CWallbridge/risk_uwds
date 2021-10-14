@@ -1,0 +1,13 @@
+include risk_uwds/data/robot.xml
+include risk_uwds/data/allLinks.txt
+include risk_uwds/data/careObot.rob
+include risk_uwds/data/human.rob
+include risk_uwds/data/rArmLinks.txt
+include risk_uwds/data/rArmLinksMinimal.txt
+include risk_uwds/data/robotMinimal.txt
+include risk_uwds/data/sphere.off
+include risk_uwds/data/thincube.off
+include risk_uwds/meshes/cafe_table_new.date
+include risk_uwds/meshes/coke_can.dae
+include risk_uwds/meshes/coke_can.png
+include risk_uwds/meshes/colourlessCoke.dae
