@@ -3,7 +3,7 @@
 #check if it is possible for the human to knock over the cup
 import os
 
-#import getTfFrames
+import getTfFrames
 
 import rospy
 from geometry_msgs.msg import Pose, PoseStamped
@@ -129,10 +129,10 @@ def robot_update(data):
 if __name__ == "__main__":
     global attached
     
-    #rospy.init_node("robotMove")
-    #getTfFrames.run_get_Tf_Frames()
+    rcmd = RobotCommand()
+    rcmd.Start()
     
-    os.system('python getTfFrames.py')#I'm not proud of this implementation either \_(._.)_/ but it'll have to do for now
+    getTfFrames.run_get_Tf_Frames()
 
     perform_scenario = rospy.get_param("/solution")#open("inverseKinematics/solution.txt","r").read().strip()=="True"#getTfFrames.solution
 
@@ -146,8 +146,8 @@ if __name__ == "__main__":
         pub1 = rospy.Publisher('/docker_control/move_base_linear_simple/goal', PoseStamped, queue_size=10)#Changed from /move_base_simple/goal
         #Move arms to side so robot can pass through the hallway
 
-        rcmd = RobotCommand()
-        rcmd.Start()
+        #rcmd = RobotCommand()
+        #rcmd.Start()
 
         #Move robot's base to start position
         #print("Moving the robot to table")

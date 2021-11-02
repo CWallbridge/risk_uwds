@@ -384,10 +384,11 @@ def run_get_Tf_Frames():
 
     #destruct
     inverseKinematicsKlampt.kill()
-    rospy.signal_shutdown("no longer needed")
+    #rospy.signal_shutdown("no longer needed")
     #rospy.spin()
     
 if __name__ == "__main__":
     
     rospy.init_node("getTFFrames")
     run_get_Tf_Frames()
+    rospy.signal_shutdown("no longer needed")
