@@ -1,4 +1,3 @@
-actor__upperarm_r
-actor__lowerarm_r
-actor__hand_r
-
+shoulder_r
+elbow_r
+hand_r

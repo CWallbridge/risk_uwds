@@ -2,7 +2,7 @@ import rospy
 from simple_script_server import script#Used to move arm
 
 class RobotCommand(script):
-	
+    
     def Initialize(self):
         rospy.loginfo("Initializing all components...")
         

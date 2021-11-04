@@ -17,10 +17,10 @@ uselink = {
     "actor::upperleg_l":["actor::spine_01","hip_l","spine_lower"],
     "actor::upperleg_r":["actor::spine_01","hip_r","spine_lower"],
 }
-child_link = {k.replace("::","__"): uselink[k][0].replace("::","__") for k in uselink}
+child_link = {uselink[k][1]: uselink[k][2] for k in uselink}
 
 #make child - parent relationship with only necessary info.
-#assume that we already have word defined somewhere else. start with odom combined
+#assume that we already have world defined somewhere else. start with odom combined
 child_link_robot = {
     "odom_combined":"world",
     "base_footprint":"odom_combined",

@@ -27,8 +27,8 @@ import inverseKinematicsKlampt
 busy = False
 all_poses_human=[[],[],[],[]]
 all_poses_robot=[[],[],[],[]]
-relative_poses = {'gazebo_world': np.eye(4)}
-nodes_parent = {'gazebo_world' : 'world'}
+relative_poses = {'world': np.eye(4)}
+nodes_parent = {'world' : ''}
 coke_pos_found = False
 solution_found = False
 link_poses_found = False
@@ -126,7 +126,7 @@ def joints(number_of_nodes,human_limits=True):
             finished_string+="joint spin "+str(ballsocket+3+joint*6)+"\n"
     if not human_limits:
         finished_string+="\n"
-        print("reached here")
+        print("joints: reached here")
         for ballsocket in range(number_of_nodes-3,number_of_nodes):
             finished_string+="joint weld "+str(ballsocket)+"\n"
     return finished_string
@@ -186,11 +186,12 @@ def relative_to_absolute(child_frame, debug = False):
         path_to_parent.append(current_node)
         current_node=nodes_parent[current_node]
     current_transform = np.eye(4)
-
+    
+    print relative_poses
+    
     for nodes in path_to_parent[::-1]:
-        current_transform = concatenate_matrices(current_transform,relative_poses[nodes])#i still don't get why the arguments are this way around
-        if debug:
-            print(current_transform)
+        current_transform = concatenate_matrices(current_transform,relative_poses[nodes])
+        print(current_transform)
     return current_transform
     
 def klampt_to_gazebo(configuration,padding = 1):
@@ -237,6 +238,7 @@ def update_pos(data):
     if busy:
         return
     busy = True
+    
 
     #construct a dictionary tree of child tfs and parent tfs.
     for item in data.transforms:
@@ -245,6 +247,7 @@ def update_pos(data):
         if parent_name in nodes_parent:
             nodes_parent[child_frame] = parent_name
             relative_poses[child_frame] = transform2homogeneous(item.transform)
+            print("%s child : %s parent" % (child_frame, nodes_parent[child_frame]))
     
     for item in data.transforms:
         child_frame = item.child_frame_id

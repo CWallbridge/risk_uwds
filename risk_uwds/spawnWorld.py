@@ -175,8 +175,8 @@ def set_hypothetical_angles(hypothetical_world,gazebo_world):
     """displays the angles in /human_solution inside hypothetical world.
     To view, type "uwds view hypothetical" in a new window.
     This code will only stop running if ctrl+c is pressed to exit or esc is pressed in the underworlds window. """
-    parent_name = "actor__spine_03"
-    child_name = "actor__upperarm_r"
+    parent_name = "spine_upper"
+    child_name = "shoulder_r"
     #print([x for x in gazebo_world.relative_poses])
     #print("END GAZEBO")
     #print([x for x in all_nodes_human])
@@ -217,6 +217,7 @@ if __name__ == "__main__":
     real_world_name = "raw"
     hypothetical_world_name = "hypothetical"
     underworld_real = UwdsManager(real_world_name)
+    #TODO - This needs changing, the whole point of underworlds is not to create the world from scratch.
     underworld_hypo = UwdsManager(hypothetical_world_name)
     mesh_path = os.path.abspath(os.path.dirname(__file__))+"/meshes/"
 
